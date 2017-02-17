@@ -1,9 +1,9 @@
 from flask_restful import Resource, Api
 import os
 import sqlite3
-from flask import Flask, request, session, g, url_for, abort, flash
+from flask import Flask, request, redirect, session, g, url_for, abort, flash
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/static/')
 app.config.from_object(__name__) # load config from this file , app.py
 api = Api(app)
 
@@ -56,7 +56,7 @@ def query_db(query, args=(), one=False):
 
 @app.route('/', methods=['GET'])
 def show_form():
-    return redirect(url_for('static,', filename='index.html'))
+    return app.send_static_file('index.html')
 
 def valid_submit(form):
     if '' in form.values(): return False
