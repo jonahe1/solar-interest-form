@@ -1,0 +1,3 @@
+graft solar_form/templates
+graft solar_form/static
+include solar_form/schema.sql

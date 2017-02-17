@@ -1,0 +1,9 @@
+MANIFEST.in
+solar_form/__init__.py
+solar_form/app.py
+solar_form/schema.sql
+solar_form.egg-info/PKG-INFO
+solar_form.egg-info/SOURCES.txt
+solar_form.egg-info/dependency_links.txt
+solar_form.egg-info/requires.txt
+solar_form.egg-info/top_level.txt
