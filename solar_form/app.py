@@ -89,31 +89,31 @@ class Responses_Count(Resource):
 class Responses_Age(Resource):
     def get_age(self, age):
         query = query_db("select * from entries where age='%s'"%age)
-        result = {'data': [dict(zip(tuple (query.keys()), i)) for i in query.cursor]}
+        result = {'data': [dict(zip(tuple (query.keys()), i)) for i in query]}
         return result
 
 class Responses_City(Resource):
     def get_city(self, city):
         query = query_db("select * from entries where city='%s'"%city)
-        result = {'data': [dict(zip(tuple (query.keys()), i)) for i in query.cursor]}
+        result = {'data': [dict(zip(tuple (query.keys()), i)) for i in query]}
         return result
 
 class Responses_State(Resource):
     def get_state(self, state):
         query = query_db("select * from entries where state='%s'"%state)
-        result = {'data': [dict(zip(tuple (query.keys()), i)) for i in query.cursor]}
+        result = {'data': query}
         return result
 
 class Responses_ZIP(Resource):
     def get_zip(self, zipcode):
         query = query_db("select * from entries where zip='%s'"%zipcode)
-        result = {'data': [dict(zip(tuple (query.keys()), i)) for i in query.cursor]}
+        result = {'data': query}
         return result
 
 class Responses_All(Resource):
     def get_all(self):
         query = query_db('select * from entries')
-        result = {'data': [dict(zip(tuple (query.keys()), i)) for i in query.cursor]}
+        result = {'data': query}
         return result
 
 api.add_resource(Responses_Age, '/age/<string:age>')
