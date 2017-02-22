@@ -1,9 +1,16 @@
 MANIFEST.in
 solar_form/__init__.py
-solar_form/app.py
 solar_form/schema.sql
+solar_form/solar_form.py
 solar_form.egg-info/PKG-INFO
 solar_form.egg-info/SOURCES.txt
 solar_form.egg-info/dependency_links.txt
 solar_form.egg-info/requires.txt
 solar_form.egg-info/top_level.txt
+solar_form/static/.DS_Store
+solar_form/static/.Rhistory
+solar_form/static/index.html
+solar_form/static/css/main.65027555.css
+solar_form/static/css/main.65027555.css.map
+solar_form/static/js/main.4e6896f8.js
+solar_form/static/js/main.4e6896f8.js.map

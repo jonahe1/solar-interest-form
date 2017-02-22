@@ -3,7 +3,7 @@ import os
 import sqlite3
 from flask import Flask, request, redirect, session, g, url_for, abort, flash
 
-app = Flask(__name__, static_url_path='/static/')
+app = Flask(__name__)
 app.config.from_object(__name__) # load config from this file , app.py
 api = Api(app)
 
@@ -56,7 +56,16 @@ def query_db(query, args=(), one=False):
 
 @app.route('/', methods=['GET'])
 def show_form():
+    #return redirect("http://localhost:9000/")
     return app.send_static_file('index.html')
+
+# @app.route('/index.js')
+# def serve_js():
+#     return app.send_static_file('index.js')
+#
+# @app.route('/index.css')
+# def serve_css():
+#     return app.send_static_file('index.css')
 
 def valid_submit(form):
     if '' in form.values(): return False
@@ -87,31 +96,31 @@ class Responses_Count(Resource):
         return query
 
 class Responses_Age(Resource):
-    def get_age(self, age):
+    def get(self, age):
         query = query_db("select * from entries where age='%s'"%age)
         result = {'data': [dict(zip(tuple (query.keys()), i)) for i in query]}
         return result
 
 class Responses_City(Resource):
-    def get_city(self, city):
+    def get(self, city):
         query = query_db("select * from entries where city='%s'"%city)
         result = {'data': [dict(zip(tuple (query.keys()), i)) for i in query]}
         return result
 
 class Responses_State(Resource):
-    def get_state(self, state):
+    def get(self, state):
         query = query_db("select * from entries where state='%s'"%state)
         result = {'data': query}
         return result
 
 class Responses_ZIP(Resource):
-    def get_zip(self, zipcode):
+    def get(self, zipcode):
         query = query_db("select * from entries where zip='%s'"%zipcode)
         result = {'data': query}
         return result
 
 class Responses_All(Resource):
-    def get_all(self):
+    def get(self):
         query = query_db('select * from entries')
         result = {'data': query}
         return result
