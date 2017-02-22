@@ -1,7 +1,7 @@
 from flask_restful import Resource, Api
 import os
 import sqlite3
-from flask import Flask, request, redirect, session, g, url_for, abort, flash
+from flask import Flask, request, redirect, session, g, url_for, abort, flash, jsonify
 
 app = Flask(__name__)
 app.config.from_object(__name__) # load config from this file , app.py
@@ -17,10 +17,16 @@ app.config.update(dict(
 app.config.from_envvar('APP_SETTINGS', silent=True)
 
 def connect_db():
-    """Connects to the specific database."""
+    # Connects to database file specified in config
     rv = sqlite3.connect(app.config['DATABASE'])
-    rv.row_factory = sqlite3.Row
+    rv.row_factory = sqlite3.Row # uses namedtuple object
     return rv
+
+def get_db():
+    # Open a new database connection if the current context doesn't have one
+    if not hasattr(g, 'sqlite_db'):
+        g.sqlite_db = connect_db()
+    return g.sqlite_db
 
 def init_db():
     db = get_db()
@@ -30,25 +36,18 @@ def init_db():
 
 @app.cli.command('initdb')
 def initdb_command():
-    """Initializes the database."""
+    # Allows initialization of the databse through command line
     init_db()
     print('Initialized the database.')
 
-def get_db():
-    """Opens a new database connection if there is none yet for the
-    current application context.
-    """
-    if not hasattr(g, 'sqlite_db'):
-        g.sqlite_db = connect_db()
-    return g.sqlite_db
-
 @app.teardown_appcontext
 def close_db(error):
-    """Closes the database again at the end of the request."""
+    # Closes the database connection at the end of every request
     if hasattr(g, 'sqlite_db'):
         g.sqlite_db.close()
 
 def query_db(query, args=(), one=False):
+    # From SQLite 3 with Flask tutorial
     cur = get_db().execute(query, args)
     rv = cur.fetchall()
     cur.close()
@@ -56,74 +55,80 @@ def query_db(query, args=(), one=False):
 
 @app.route('/', methods=['GET'])
 def show_form():
-    #return redirect("http://localhost:9000/")
     return app.send_static_file('index.html')
 
-# @app.route('/index.js')
-# def serve_js():
-#     return app.send_static_file('index.js')
-#
-# @app.route('/index.css')
-# def serve_css():
-#     return app.send_static_file('index.css')
-
 def valid_submit(form):
+    # Checks if any form values empty
     if '' in form.values(): return False
     return True
 
 @app.route('/', methods=['POST'])
 def submit():
-    name = request.form['yourname']
-    age = request.form['yourage']
-    address = request.form['youraddress']
-    city = request.form['yourcity']
-    state = request.form['yourstate']
-    zipcode = request.form['yourzip']
-    interest = request.form['yourinterest']
+    name = request.form['name']
+    age = request.form['age']
+    address = request.form['address']
+    city = request.form['city']
+    state = request.form['state']
+    zipcode = request.form['zip']
+    interest = request.form['interest']
     if valid_submit(request.form):
         db = get_db()
         db.execute('insert into entries (name, age, address, city, state, zip, text) values (?, ?, ?, ?, ?, ?, ?)',
                  [name, age, address, city, state, zipcode, interest])
         db.commit()
-        flash('New entry was successfully posted')
         return 'Submit successful'
     else:
         return 'Form incomplete'
 
 class Responses_Count(Resource):
     def get(self):
-        query = query_db('select count(*) from entries')
-        return query
+        entry = query_db('select count(*) from entries')
+        return entry[0][0]
 
 class Responses_Age(Resource):
     def get(self, age):
-        query = query_db("select * from entries where age='%s'"%age)
-        result = {'data': [dict(zip(tuple (query.keys()), i)) for i in query]}
-        return result
+        data = {}
+        for entry in query_db("select * from entries where age='%s'"%age):
+            data[entry['id']] = {'name': entry['name'], 'age': entry['age'], 'address': entry['address'],
+                'city': entry['city'], 'state': entry['state'], 'zip': entry['zip'],
+                'interest': entry['text']}
+        return data
 
 class Responses_City(Resource):
     def get(self, city):
-        query = query_db("select * from entries where city='%s'"%city)
-        result = {'data': [dict(zip(tuple (query.keys()), i)) for i in query]}
-        return result
+        data = {}
+        for entry in query_db("select * from entries where city='%s'"%city):
+            data[entry['id']] = {'name': entry['name'], 'age': entry['age'], 'address': entry['address'],
+                'city': entry['city'], 'state': entry['state'], 'zip': entry['zip'],
+                'interest': entry['text']}
+        return data
 
 class Responses_State(Resource):
     def get(self, state):
-        query = query_db("select * from entries where state='%s'"%state)
-        result = {'data': query}
-        return result
+        data = {}
+        for entry in query_db("select * from entries where state='%s'"%state):
+            data[entry['id']] = {'name': entry['name'], 'age': entry['age'], 'address': entry['address'],
+                'city': entry['city'], 'state': entry['state'], 'zip': entry['zip'],
+                'interest': entry['text']}
+        return data
 
 class Responses_ZIP(Resource):
     def get(self, zipcode):
-        query = query_db("select * from entries where zip='%s'"%zipcode)
-        result = {'data': query}
-        return result
+        data = {}
+        for entry in query_db("select * from entries where zip='%s'"%zipcode):
+            data[entry['id']] = {'name': entry['name'], 'age': entry['age'], 'address': entry['address'],
+                'city': entry['city'], 'state': entry['state'], 'zip': entry['zip'],
+                'interest': entry['text']}
+        return data
 
 class Responses_All(Resource):
     def get(self):
-        query = query_db('select * from entries')
-        result = {'data': query}
-        return result
+        data = {}
+        for entry in query_db('select * from entries'):
+            data[entry['id']] = {'name': entry['name'], 'age': entry['age'], 'address': entry['address'],
+                'city': entry['city'], 'state': entry['state'], 'zip': entry['zip'],
+                'interest': entry['text']}
+        return data
 
 api.add_resource(Responses_Age, '/age/<string:age>')
 api.add_resource(Responses_City, '/city/<string:city>')
