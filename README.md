@@ -63,21 +63,21 @@ Local Installation Instructions
 
 1. Clone the repository
 
-2. **In terminal:**
+2. **In terminal at home folder:**
 
-3. pip install flask
+  * pip install flask
 
-4. pip install flask_restful
+  * pip install flask_restful
 
-5. *cd into the repository root directory*
+3. **cd into the repository root directory**
 
-6. pip install --editable .
+  * pip install --editable .
 
-7. export FLASK_APP=solar_form
-8. export FLASK_DEBUG=True
+  * export FLASK_APP=solar_form
+  * export FLASK_DEBUG=True
 
-9. to initialize the database (clears existing one):
-  * flask initdb
+  * to initialize the database (clears existing one):
+    * flask initdb
 
-10. to run the server on a local port:
-  * flask run
+  * to run the server on a local port:
+    * flask run
