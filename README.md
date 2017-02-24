@@ -36,7 +36,7 @@ I had a good deal of experience in Python, but none in Flask or React/JavaScript
 
 Type/Track
 ----------
-FULL-STACK:
+**FULL-STACK**:
 This app is relatively evenly divided between front-end and back end-- I spent
 a good deal of time polishing the React scripts/formatting. The ReactJS
 app handles incomplete submissions in advance of the server and highlights incomplete
@@ -55,3 +55,20 @@ API Commands:
 * /api/zip/\<string:zip\>: Returns all submissions with zip matching string
 * /api/count: Returns the count of all submissions
 * /api/delete/\<int:entry_id\>: Deletes an entry from the database with id matching entry_id
+
+Local Installation Instructions
+-------------------------------
+
+This app can be launched from any Mac or Linux computer.
+1. Clone the repository
+2. **In terminal:**
+3. pip install flask
+4. pip install flask_restful
+5. *cd into the repository root directory*
+6. pip install --editable .
+7. export FLASK_APP=solar_form
+8. export FLASK_DEBUG=True
+9. to initialize the database (clears existing one):
+  * flask initdb
+10. to run the server on a local port:
+  * flask run
