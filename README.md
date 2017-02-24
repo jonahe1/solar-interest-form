@@ -1,4 +1,4 @@
-Solar City Coding Challenge:
+SolarCity Coding Challenge:
 ============================
 
 Problem
@@ -48,9 +48,10 @@ to fetch data from the database.
 
 API Commands:
 -------------
-* /all: Returns all submissions as JSON data
-* /age/<string:age>: Returns all submissions with age matching string
-* /city/<string:city>: Returns all submissions with city matching string
-* /state/<string:state>: Returns all submissions with state matching string
-* /zip/<string:zip>: Returns all submissions with zip matching string
-* /count: Returns the count of all submissions
+* /api/all: Returns all submissions as JSON data
+* /api/age/<string:age>: Returns all submissions with age matching string
+* /api/city/<string:city>: Returns all submissions with city matching string
+* /api/state/<string:state>: Returns all submissions with state matching string
+* /api/zip/<string:zip>: Returns all submissions with zip matching string
+* /api/count: Returns the count of all submissions
+* /api/delete/<int:entry_id>: Deletes an entry from the database with id matching entry_id
