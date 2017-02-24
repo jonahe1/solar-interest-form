@@ -57,11 +57,6 @@ def query_db(query, args=(), one=False):
 def show_form():
     return app.send_static_file('index.html')
 
-def valid_submit(form):
-    # Checks if any form values empty
-    if '' in form.values(): return False
-    return True
-
 @app.route('/', methods=['POST'])
 def submit():
     name = request.form['name']
@@ -71,14 +66,11 @@ def submit():
     state = request.form['state']
     zipcode = request.form['zip']
     interest = request.form['interest']
-    if valid_submit(request.form):
-        db = get_db()
-        db.execute('insert into entries (name, age, address, city, state, zip, text) values (?, ?, ?, ?, ?, ?, ?)',
-                 [name, age, address, city, state, zipcode, interest])
-        db.commit()
-        return 'Submit successful'
-    else:
-        return 'Form incomplete'
+    db = get_db()
+    db.execute('insert into entries (name, age, address, city, state, zip, text) values (?, ?, ?, ?, ?, ?, ?)',
+                [name, age, address, city, state, zipcode, interest])
+    db.commit()
+    return 'SUCCESS'
 
 class Responses_Count(Resource):
     def get(self):
