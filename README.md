@@ -74,10 +74,12 @@ Local Installation Instructions
   * pip install --editable .
 
   * export FLASK_APP=solar_form
-  * export FLASK_DEBUG=True
+  * export FLASK_DEBUG=True (if not planning to host publicly)
 
   * to initialize the database (clears existing one):
     * flask initdb
 
   * to run the server on a local port:
     * flask run
+  * to run an externally visible server:
+    * flask run --host=0.0.0.0
