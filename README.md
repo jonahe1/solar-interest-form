@@ -59,16 +59,25 @@ API Commands:
 Local Installation Instructions
 -------------------------------
 
-This app can be launched from any Mac or Linux computer.
+**This app can be launched from any Mac or Linux computer**
+
 1. Clone the repository
+
 2. **In terminal:**
+
 3. pip install flask
+
 4. pip install flask_restful
+
 5. *cd into the repository root directory*
+
 6. pip install --editable .
+
 7. export FLASK_APP=solar_form
 8. export FLASK_DEBUG=True
+
 9. to initialize the database (clears existing one):
   * flask initdb
+
 10. to run the server on a local port:
   * flask run
