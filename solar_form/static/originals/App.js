@@ -5,7 +5,7 @@ class InterestForm extends React.Component {
       super(props);
       this.state = {
          name: "",
-         age: 0,
+         age: "",
          address: "",
          city: "",
          state: "",
@@ -78,7 +78,7 @@ class InterestForm extends React.Component {
       }
    }
 
-   inputBox(type) {
+   inputBox(type, input_type) {
       var inputStyle = {
          padding: 5,
          display: "block",
@@ -95,7 +95,7 @@ class InterestForm extends React.Component {
       return (
          <input style={inputStyle}
          name={type}
-         type="text"
+         type={input_type}
          value={this.state[type]}
          onChange={this.handleInputChange} />
       );
@@ -244,22 +244,22 @@ class InterestForm extends React.Component {
          {status}
          <label style={labelStyle}>
          Full Name:
-         {this.inputBox("name")}
+         {this.inputBox("name", "text")}
          </label>
          <br />
          <label style={labelStyle}>
          Age:
-         {this.inputBox("age")}
+         {this.inputBox("age", "number")}
          </label>
          <br />
          <label style={labelStyle}>
          Street Address:
-         {this.inputBox("address")}
+         {this.inputBox("address", "text")}
          </label>
          <br />
          <label style={labelStyle}>
          City:
-         {this.inputBox("city")}
+         {this.inputBox("city", "text")}
          </label>
          <br />
          <label style={labelStyle}>
@@ -269,7 +269,7 @@ class InterestForm extends React.Component {
          <br />
          <label style={labelStyle}>
          Zipcode:
-         {this.inputBox("zip")}
+         {this.inputBox("zip", "number")}
          </label>
          <br />
          <label style={labelStyle}>
