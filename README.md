@@ -15,7 +15,8 @@ sqlite3.
 
 Facebook Incubator's create-react-app package (available on GitHub) was used to
 develop the front-end and to build the final optimized .css and .js files
-hosted on the server.
+hosted on the server. The original, non-optimized App.js and other files are
+located in /static/originals.
 
 The sqlite3 database is stored locally, which provides faster queries than
 remote or distributed for small scale web apps like this one-- even with
