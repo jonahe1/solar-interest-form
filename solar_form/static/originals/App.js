@@ -33,7 +33,7 @@ class InterestForm extends React.Component {
 
    handleSubmit(event) {
       for (var key in this.state) {
-         if (!this.state[key]) {
+         if (!this.state[key] && key != 'submitFailed' && key != 'message') {
             this.setState({
                message: "Form incomplete",
                submitFailed: true
@@ -72,7 +72,7 @@ class InterestForm extends React.Component {
          body: formData
       }
       try {
-         return fetch('http://127.0.0.1:5000/', data)
+         return fetch('/api/forms', data)
       } catch(error) {
          console.error(error);
       }
@@ -83,7 +83,7 @@ class InterestForm extends React.Component {
          padding: 5,
          display: "block",
          width: 375,
-         borderRadius: 7,
+         borderRadius: 5,
          border: "2px solid #dadada",
          borderColor: "",
       };
@@ -107,7 +107,7 @@ class InterestForm extends React.Component {
          width: 387,
          paddingBottom: 0.4,
          paddingRight: 0.4,
-         borderRadius: 7,
+         borderRadius: 5,
          border: "2px solid #dadada",
          borderColor: "",
       };
@@ -127,7 +127,7 @@ class InterestForm extends React.Component {
    dropdownBox() {
       var dropDownStyle = {
          display: "block",
-         borderRadius: 7,
+         borderRadius: 5,
          border: "2px solid #dadada",
          borderColor: "",
       };
