@@ -52,10 +52,10 @@ library to fetch data from the database.
 
 REST API Commands:
 -------------
-* /api/forms: Returns all submissions as JSON data
-* /api/forms/count: Returns the count of all submissions
-* /api/forms?column=x: Returns all entries where column (a SQL column)=x
-* /api/delete/\<int:entry_id\>: Deletes an entry from the database with id matching entry_id
+* GET /api/forms: Returns all submissions as JSON data
+* GET /api/forms/count: Returns the count of all submissions
+* GET /api/forms?column=x: Returns all entries where column (a SQL column)=x
+* DELETE /api/delete/\<int:entry_id\>: Deletes an entry from the database with id matching entry_id
 
 Local Installation Instructions
 -------------------------------
