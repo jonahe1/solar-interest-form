@@ -66,7 +66,7 @@ def show_form():
     return app.send_static_file('index.html')
 
 # Commits post request form data to database
-@app.route('/', methods=['POST'])
+@app.route('/api/forms', methods=['POST'])
 def submit():
     name = request.form['name']
     age = request.form['age']
@@ -81,55 +81,63 @@ def submit():
     db.commit()
     return 'SUCCESS'
 
+# Returns JSON data for each entry with 'age' matching age
+def get_age(age):
+    data = {}
+    for entry in query_db("select * from entries where age='%s'"%age):
+        data[entry['id']] = {'name': entry['name'], 'age': entry['age'], 'address': entry['address'],
+            'city': entry['city'], 'state': entry['state'], 'zip': entry['zip'],
+            'interest': entry['text']}
+    return jsonify(data)
+
+# Returns JSON data for each entry with 'city' matching city
+def get_city(city):
+    data = {}
+    for entry in query_db("select * from entries where city='%s'"%city):
+        data[entry['id']] = {'name': entry['name'], 'age': entry['age'], 'address': entry['address'],
+            'city': entry['city'], 'state': entry['state'], 'zip': entry['zip'],
+            'interest': entry['text']}
+    return jsonify(data)
+
+# Returns JSON data for each entry with 'state' matching state
+def get_state(state):
+    data = {}
+    for entry in query_db("select * from entries where state='%s'"%state):
+        data[entry['id']] = {'name': entry['name'], 'age': entry['age'], 'address': entry['address'],
+            'city': entry['city'], 'state': entry['state'], 'zip': entry['zip'],
+            'interest': entry['text']}
+    return jsonify(data)
+
+# Returns JSON data for each entry with 'zip' matching zipcode
+def get_zip(zipcode):
+    data = {}
+    for entry in query_db("select * from entries where zip='%s'"%zipcode):
+        data[entry['id']] = {'name': entry['name'], 'age': entry['age'], 'address': entry['address'],
+            'city': entry['city'], 'state': entry['state'], 'zip': entry['zip'],
+            'interest': entry['text']}
+    return jsonify(data)
+
 # Returns JSON data for count of entries
 class Responses_Count(Resource):
     def get(self):
         entry = query_db('select count(*) from entries')
         return jsonify(entry[0][0])
 
-# Returns JSON data for each entry with 'age' matching age
-class Responses_Age(Resource):
-    def get(self, age):
-        data = {}
-        for entry in query_db("select * from entries where age='%s'"%age):
-            data[entry['id']] = {'name': entry['name'], 'age': entry['age'], 'address': entry['address'],
-                'city': entry['city'], 'state': entry['state'], 'zip': entry['zip'],
-                'interest': entry['text']}
-        return jsonify(data)
-
-# Returns JSON data for each entry with 'city' matching city
-class Responses_City(Resource):
-    def get(self, city):
-        data = {}
-        for entry in query_db("select * from entries where city='%s'"%city):
-            data[entry['id']] = {'name': entry['name'], 'age': entry['age'], 'address': entry['address'],
-                'city': entry['city'], 'state': entry['state'], 'zip': entry['zip'],
-                'interest': entry['text']}
-        return jsonify(data)
-
-# Returns JSON data for each entry with 'state' matching state
-class Responses_State(Resource):
-    def get(self, state):
-        data = {}
-        for entry in query_db("select * from entries where state='%s'"%state):
-            data[entry['id']] = {'name': entry['name'], 'age': entry['age'], 'address': entry['address'],
-                'city': entry['city'], 'state': entry['state'], 'zip': entry['zip'],
-                'interest': entry['text']}
-        return jsonify(data)
-
-# Returns JSON data for each entry with 'zip' matching zipcode
-class Responses_ZIP(Resource):
-    def get(self, zipcode):
-        data = {}
-        for entry in query_db("select * from entries where zip='%s'"%zipcode):
-            data[entry['id']] = {'name': entry['name'], 'age': entry['age'], 'address': entry['address'],
-                'city': entry['city'], 'state': entry['state'], 'zip': entry['zip'],
-                'interest': entry['text']}
-        return jsonify(data)
-
-# Returns JSON data for all entries in database
-class Responses_All(Resource):
+# Returns JSON data, route to sorting request based on args
+class Responses(Resource):
     def get(self):
+        age = request.args.get('age') # if age sort requested
+        if age is not None:
+            return get_age(age)
+        city = request.args.get('city') # if city sort requested
+        if city is not None:
+            return get_city(city)
+        state = request.args.get('state') # etc
+        if state is not None:
+            return get_state(state)
+        zipcode = request.args.get('zip')
+        if zipcode is not None:
+            return get_zip(zipcode)
         data = {}
         for entry in query_db('select * from entries'):
             data[entry['id']] = {'name': entry['name'], 'age': entry['age'], 'address': entry['address'],
@@ -138,20 +146,16 @@ class Responses_All(Resource):
         return jsonify(data)
 
 # Deletes entry from database with 'id' matching entry_id
-class Delete_ID(Resource):
-    def get(self, entry_id):
+class Response(Resource):
+    def delete(self, entry_id):
         db = get_db()
         db.execute("delete from entries where id=%d"%entry_id)
         db.commit()
         return jsonify({'result': True})
 
-api.add_resource(Responses_Age, '/api/age/<string:age>')
-api.add_resource(Responses_City, '/api/city/<string:city>')
-api.add_resource(Responses_State, '/api/state/<string:state>')
-api.add_resource(Responses_ZIP, '/api/zip/<string:zipcode>')
-api.add_resource(Responses_All, '/api/all')
-api.add_resource(Responses_Count, '/api/count')
-api.add_resource(Delete_ID, '/api/delete/<int:entry_id>')
+api.add_resource(Responses, '/api/forms')
+api.add_resource(Responses_Count, '/api/forms/count')
+api.add_resource(Response, '/api/forms/<int:entry_id>')
 
 if __name__ == '__main__':
      app.run()
