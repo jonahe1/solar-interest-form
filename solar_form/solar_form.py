@@ -81,37 +81,10 @@ def submit():
     db.commit()
     return 'SUCCESS'
 
-# Returns JSON data for each entry with 'age' matching age
-def get_age(age):
+# Returns JSON data for each entry with code matching category
+def get_sort(code, category):
     data = {}
-    for entry in query_db("select * from entries where age='%s'"%age):
-        data[entry['id']] = {'name': entry['name'], 'age': entry['age'], 'address': entry['address'],
-            'city': entry['city'], 'state': entry['state'], 'zip': entry['zip'],
-            'interest': entry['text']}
-    return jsonify(data)
-
-# Returns JSON data for each entry with 'city' matching city
-def get_city(city):
-    data = {}
-    for entry in query_db("select * from entries where city='%s'"%city):
-        data[entry['id']] = {'name': entry['name'], 'age': entry['age'], 'address': entry['address'],
-            'city': entry['city'], 'state': entry['state'], 'zip': entry['zip'],
-            'interest': entry['text']}
-    return jsonify(data)
-
-# Returns JSON data for each entry with 'state' matching state
-def get_state(state):
-    data = {}
-    for entry in query_db("select * from entries where state='%s'"%state):
-        data[entry['id']] = {'name': entry['name'], 'age': entry['age'], 'address': entry['address'],
-            'city': entry['city'], 'state': entry['state'], 'zip': entry['zip'],
-            'interest': entry['text']}
-    return jsonify(data)
-
-# Returns JSON data for each entry with 'zip' matching zipcode
-def get_zip(zipcode):
-    data = {}
-    for entry in query_db("select * from entries where zip='%s'"%zipcode):
+    for entry in query_db("select * from entries where %s='%s'" %(category,code)):
         data[entry['id']] = {'name': entry['name'], 'age': entry['age'], 'address': entry['address'],
             'city': entry['city'], 'state': entry['state'], 'zip': entry['zip'],
             'interest': entry['text']}
@@ -128,16 +101,16 @@ class Responses(Resource):
     def get(self):
         age = request.args.get('age') # if age sort requested
         if age is not None:
-            return get_age(age)
+            return get_sort(age, 'age')
         city = request.args.get('city') # if city sort requested
         if city is not None:
-            return get_city(city)
+            return get_sort(city, 'city')
         state = request.args.get('state') # etc
         if state is not None:
-            return get_state(state)
+            return get_sort(state, 'state')
         zipcode = request.args.get('zip')
         if zipcode is not None:
-            return get_zip(zipcode)
+            return get_sort(zipcode, 'zip')
         data = {}
         for entry in query_db('select * from entries'):
             data[entry['id']] = {'name': entry['name'], 'age': entry['age'], 'address': entry['address'],
