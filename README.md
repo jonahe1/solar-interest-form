@@ -9,7 +9,7 @@ interested in solar panels. It should save this data in a database.
 
 Solution
 --------
-The solution is a web app built using a React.JS front-end and a Flask (Python)
+The solution is a web app built using a ReactJS front-end and a Flask (Python)
 back-end. The database is queried using SQL, and serviced through Flask using
 sqlite3.
 
