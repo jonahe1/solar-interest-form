@@ -55,7 +55,7 @@ REST API Commands:
 * GET /api/forms: Returns all submissions as JSON data
 * GET /api/forms/count: Returns the count of all submissions
 * GET /api/forms?column=x: Returns all entries where column (a SQL column)=x
-* DELETE /api/delete/\<int:entry_id\>: Deletes an entry from the database with id matching entry_id
+* DELETE /api/forms/\<int:entry_id\>: Deletes an entry from the database with id matching entry_id
 * POST /api/forms: Sends post request with data contained in request.form
 
 Local Installation Instructions
